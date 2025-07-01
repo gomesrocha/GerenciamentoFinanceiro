@@ -2,15 +2,24 @@ package com.fabiogomesrocha.endpoint;
 
 import com.fabiogomesrocha.dto.UserDTO;
 import com.fabiogomesrocha.model.User;
+import jakarta.annotation.security.RolesAllowed;
+import jakarta.inject.Inject;
+import jakarta.json.JsonNumber;
 import jakarta.transaction.Transactional;
 import jakarta.ws.rs.*;
 import jakarta.ws.rs.core.MediaType;
+import jakarta.ws.rs.core.Response;
+import org.eclipse.microprofile.jwt.JsonWebToken;
+
 import java.util.List;
+import java.util.Map;
 
 @Path("/users")
 @Consumes(MediaType.APPLICATION_JSON)
 @Produces(MediaType.APPLICATION_JSON)
 public class UserEndpoint {
+
+
 
     @GET
     public List<User> listAll() {

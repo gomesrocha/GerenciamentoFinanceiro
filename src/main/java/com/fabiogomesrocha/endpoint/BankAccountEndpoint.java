@@ -12,29 +12,26 @@ import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Response;
 import io.quarkus.security.identity.SecurityIdentity;
 import jakarta.ws.rs.core.SecurityContext;
+import jakarta.inject.Inject;
+import org.eclipse.microprofile.jwt.JsonWebToken;
 
 import java.math.BigDecimal;
 import java.util.List;
 import java.util.Map;
+import jakarta.json.JsonNumber;
 
 @Path("/bank-accounts")
 @Produces(MediaType.APPLICATION_JSON)
 @Consumes(MediaType.APPLICATION_JSON)
 public class BankAccountEndpoint {
 
-    @GET
-    @Path("/me")
-    @RolesAllowed("admin")
-    public Response getUserInfo() {
-        return Response.ok(Map.of(
-                "user", identity.getPrincipal().getName(), // vai vir o client_id
-                "roles", identity.getRoles()
-        )).build();
-    }
+
+
+
 
     @GET
     @Path("/debug-jwt")
-    @RolesAllowed("admin")
+    @Authenticated
     public Response debugToken(@Context SecurityContext ctx) {
         return Response.ok(Map.of(
                 "name", ctx.getUserPrincipal().getName()

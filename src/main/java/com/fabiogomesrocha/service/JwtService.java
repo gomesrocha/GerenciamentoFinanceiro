@@ -37,7 +37,7 @@ public class JwtService {
         }
     }
 
-    public String generateToken(String username, String role) {
+    public String generateToken(Long userId, String username, String role) {
         try {
             JwtClaims claims = new JwtClaims();
             claims.setIssuer("http://localhost:8084");
@@ -45,6 +45,7 @@ public class JwtService {
             claims.setIssuedAtToNow();
             claims.setExpirationTimeMinutesInTheFuture(60); // Token expira em 60 min
             claims.setSubject(username);
+            claims.setClaim("userId", userId);
             claims.setClaim("upn", username);
             claims.setStringListClaim("groups", Arrays.asList(role));
 

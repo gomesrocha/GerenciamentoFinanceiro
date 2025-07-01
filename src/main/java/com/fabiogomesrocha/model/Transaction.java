@@ -1,6 +1,7 @@
 package com.fabiogomesrocha.model;
 
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import io.quarkus.hibernate.orm.panache.PanacheEntity;
 import jakarta.persistence.*;
 import java.math.BigDecimal;
@@ -27,5 +28,6 @@ public class Transaction extends PanacheEntity {
 
     @ManyToOne
     @JoinColumn(name = "bankAccount_id")
+    @JsonIgnore
     public BankAccount bankAccount;
 }
