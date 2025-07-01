@@ -1,5 +1,7 @@
 package com.fabiogomesrocha.endpoint;
 
+import com.fabiogomesrocha.dto.LoginDTO;
+import com.fabiogomesrocha.dto.UserInfoDTO;
 import com.fabiogomesrocha.model.User;
 import com.fabiogomesrocha.service.JwtService;
 import jakarta.annotation.security.RolesAllowed;
@@ -30,23 +32,25 @@ public class AuthResource {
     @Path("/me")
     @RolesAllowed("admin")
     public Response getUserInfo() {
-        return Response.ok(Map.of(
-                "userId", jwt.getClaim("userId"),
-                "user", jwt.getName(), // equivalente ao sub
-                "roles", identity.getRoles()
-        )).build();
+        UserInfoDTO userInfo = new UserInfoDTO(
+                jwt.getClaim("userId"),
+                jwt.getName(),
+                identity.getRoles()
+        );
+        return Response.ok(userInfo).build();
     }
+
 
 
     @POST
     @Path("/login")
     @Transactional
-    public Response login(User user) throws Exception {
-        User dbUser = User.find("username", user.username).firstResult();
+    public Response login(LoginDTO loginDTO) throws Exception {
+        User dbUser = User.find("username", loginDTO.username).firstResult();
 
-        if (dbUser != null && dbUser.password.equals(user.password)) {
+        if (dbUser != null && dbUser.password.equals(loginDTO.password)) {
             String token = jwtService.generateToken(dbUser.id, dbUser.username, dbUser.role);
-            return Response.ok(Collections.singletonMap("token", token)).build();
+            return Response.ok(Map.of("token", token)).build();
         }
 
         return Response.status(Response.Status.UNAUTHORIZED).build();
